@@ -1,0 +1,98 @@
+{% extends 'client_visit/base.html' %}
+{% load static %}
+{% load reports_tags %}
+
+{% block title %}
+  - {{title}}
+{% endblock %}
+
+{% block content %}
+<div class="container visit-detail-reports__container">
+  <h1 class="title">Детализация визитов</h1>
+  <button class="btn btn__next_upper"><a href="{% url 'reports' %}">Назад</a></button>
+  <div class="flex visit-detail-report__content">
+    <div class="visit-detail-report__left">
+      <div class="table__wrapper">
+        <table  border="1" cellspacing="0" cellpadding="3" class="table table-striped visit-detail-reports__table">
+          <thead>
+            <tr>
+              <th></th>
+              {% if request.user.groups.all.0.name == 'Директор' or request.user.groups.all.0.name == 'Управляющий' %}
+              <th>Сотрудник</th>
+              {% endif %}
+              <th>Дата визита</th>
+              <th>ФИО клиента</th>
+              <th>Дата рождения</th>
+              <th>Дата следующего контакта</th>
+              <th>Тип следующего контакта</th>
+              <th>Основной продукт</th>
+              <th>КН результат</th>
+              <th>ФР результат</th>
+              <th>ИЗП результат</th>
+              <th>Пенсия результат</th>
+              <th>Депозит результат</th>
+              <th>ПУ результат</th>
+              <th>КК результат</th>
+              <th>НПО результат</th>
+              <th>Лид БО результат</th>
+              <th>КСП результат</th>
+              <th>ИСЖ результат</th>
+              <th>НСЖ результат</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for visit in visits %}
+            <tr>
+              <td><a href="{% url 'visit_detail' visit.pk %}"><img class="table__img" src="{% static 'client_visit/images/arrow.png' %}" alt=""></a></td></td>
+              {% if request.user.groups.all.0.name == 'Директор' or request.user.groups.all.0.name == 'Управляющий' %}
+              <td>{{ visit.employee }}</td>
+              {% endif %}
+              <td>{{ visit.date_visit }}</td>
+              <td>{{ visit.last_name_client }} {{ visit.first_name_client }} {{ visit.middle_name_client }}</td>
+              <td>{{ visit.date_of_birth }}</td>
+              <td>{{ visit.date_next_contact }}</td>
+              <td>{{ visit.type_next_contact }}</td>
+              <td>{{ visit.main_product }}</td>
+              <td>{{ visit.credit_result }}</td>
+              <td>{{ visit.credit_insurance_result }}</td>
+              <td>{{ visit.izp_result }}</td>
+              <td>{{ visit.pension_result }}</td>
+              <td>{{ visit.deposit_result }}</td>
+              <td>{{ visit.service_package_result }}</td>
+              <td>{{ visit.credit_card_result }}</td>
+              <td>{{ visit.npo_result }}</td>
+              <td>{{ visit.broker_navigate_result }}</td>
+              <td>{{ visit.ksp_result }}</td>
+              <td>{{ visit.isg_result }}</td>
+              <td>{{ visit.nsg_result }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <nav class="paginator__nav">
+        <ul class="list-reset flex paginator__list">
+          {% for page in page_obj.paginator.page_range %}
+          {% if page_obj.number == page %}
+          <li class="paginatir__item paginatir__item-selected">{{ page }}</li>
+          {% else %}
+          <li class="paginatir__item">
+            <a href="?page={{ page }}">{{ page }}</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  
+    <div class="visit-detail-report__right">
+      <form action="{% url 'filter_visits' %}" method="get">
+        {% csrf_token %}
+        {{ filter.as_p }}
+        <button class="btn visit-detail-report__right-btn" type="submit">Найти</button>
+      </form>
+      <button class="btn visit-detail-report__right-btn"><a href="{% url 'visit_detail_reports' %}">Показать все</a></button>
+    </div>
+  </div>
+</div>
+{% endblock %}

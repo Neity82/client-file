@@ -1,0 +1,170 @@
+{% extends 'client_visit/base.html' %}
+{% load static %}
+{% load l10n %}
+{% load visit_client_tags %}
+
+{% block title %}
+  - {{title}}
+{% endblock %}
+
+{% block content %}
+<div class="container visit-detail__container">
+  <h1 class="title visit-detail__title">Визит клиента</h1>
+  <button class="btn btn__next_upper"><a href="{% url 'index' %}">Выйти</a></button>
+  
+  <form action="" method="post">
+    {% csrf_token %}
+    {% if messages %}
+    <ul class="call__messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">
+                {{ message|safe }}
+                <a href="{% url 'visit_form' message.extra_tags %}" class="close">✖</a>
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <button class="btn visit-detail__btn-control" type="submit">Сохранить</button>
+
+    <div class="visit-detail__client flex">
+      <div class="visit-detail__wrapper flex">
+        <p class="visit-detail__label">Клиент: </p>
+        <p class="visit-detail__name">{{object.last_name_client}} {{object.first_name_client}} {{object.middle_name_client}}</p>
+      </div>
+      <div class="visit-detail__wrapper flex">
+        <p class="visit-detail__label">Дата рождения: </p>
+        <p class="visit-detail__name">{{object.date_of_birth}}</p>
+      </div>
+    </div>
+
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    
+    <div class="flex" style="justify-content: space-between;">
+      <div class="visit-detail__form-left">
+        <p class="help">(Если Вы изменили ИНН, нажмите кнопку "Сохранить" для обнавления статуса ЗП договор.)</p>
+        <div class="visit-detail__salary flex">
+          <div class="visit-detail__wrapper">
+            <p><label class="visit-detail__label" for="">ИНН работодателя: </label>{{ form.inn_employer }}</p>
+            <div>{{ form.inn_employer.errors }}</div>
+          </div>
+          <div class="visit-detail__wrapper flex">
+            <p><label class="visit-detail__label" for="">ЗП договор: </label>{% get_salary_project object.inn_employer %}</p>
+          </div>        
+        </div>
+        <div class="visit-detail__pension flex">
+          <div class="visit-detail__wrapper">
+            <p><label class="visit-detail__label" for="">Банк пенсия: </label>{{ form.pension_bank }}</p>
+          <div>{{ form.pension_bank.errors }}</div>
+          </div>
+          <div class="visit-detail__wrapper flex">
+            <p><label class="visit-detail__label" for="">Пенсионер: </label>{% is_pension object.middle_name_client object.date_of_birth %}</p>
+          </div>        
+        </div>
+        <div class="visit-detail__main-product flex">
+          <div class="visit-detail__wrapper">
+            <p><label class="visit-detail__label" for="">Основной продукт: </label>{{ form.main_product }}</p>
+            <div>{{ form.main_product.errors }}</div>
+          </div>       
+        </div>
+      </div>
+      <div class="visit-detail__form-right">
+        <div class="flex">
+          <div class="visit-detail__wrapper">
+            <p class="help">(Дата заполняется в формате ДД.ММ.ГГГГ)</p>
+            <p><label class="visit-detail__label" for="">Дата следующего контакта: </label>{{ form.date_next_contact }}</p>
+            <div>{{ form.date_next_contact.errors }}</div>
+          </div>
+          <div class="visit-detail__wrapper">
+            <p class="help">(Обязательно к заполнению, если заполнена дата следующего контакта)</p>
+            <p><label class="visit-detail__label" for="">Тип следующего контакта: </label>{{ form.type_next_contact }}</p>
+            <div>{{ form.type_next_contact.errors }}</div>
+          </div>
+        </div>
+        <div class="visit-detail__wrapper">
+          <p><label class="visit-detail__label" for="">Общий комментарий по визиту: </label>{{ form.total_comment }}</p>
+          <div>{{ form.total_comment.errors }}</div>
+        </div>
+      </div>
+        
+    </div>
+
+    <div class="visit-detail__form-products">
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">Кредит наличными: </label>{{ form.credit_result }} {{ form.credit_sum }} {{ form.credit_comment }}</p>
+        <div>{{ form.credit_result.errors }}</div>
+        <div>{{ form.credit_sum.errors }}</div>
+        <div>{{ form.credit_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">Страховка к КН: </label>{{ form.credit_insurance_result }} {{ form.credit_insurance_sum }} {{ form.credit_insurance_comment }}</p>
+        <div>{{ form.credit_insurance_result.errors }}</div>
+        <div>{{ form.credit_insurance_sum.errors }}</div>
+        <div>{{ form.credit_insurance_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">КСП: </label>{{ form.ksp_result }} {{ form.ksp_sum }} {{ form.ksp_comment }}</p>
+        <div>{{ form.ksp_result.errors }}</div>
+        <div>{{ form.ksp_sum.errors }}</div>
+        <div>{{ form.ksp_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">Кредитная карта: </label>{{ form.credit_card_result }} {{ form.credit_card_comment }}</p>
+        <div>{{ form.credit_card_result.errors }}</div>
+        <div>{{ form.credit_card_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">Страховка к КК: </label>{{ form.credit_card_insurance_result }} {{ form.credit_card_insurance_comment }}</p>
+        <div>{{ form.credit_card_insurance_result.errors }}</div>
+        <div>{{ form.credit_card_insurance_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">Депозит: </label>{{ form.deposit_result }} {{ form.deposit_sum }} {{ form.deposit_comment }}</p>
+        <div>{{ form.deposit_result.errors }}</div>
+        <div>{{ form.deposit_sum.errors }}</div>
+        <div>{{ form.deposit_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">Пакет услуг: </label>{{ form.service_package_result }} {{ form.service_package_type }} {{ form.service_package_comment }}</p>
+        <div>{{ form.service_package_result.errors }}</div>
+        <div>{{ form.service_package_type.errors }}</div>
+        <div>{{ form.service_package_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">ИЗП: </label>{{ form.izp_result }} {{ form.izp_comment }}</p>
+        <div>{{ form.izp_result.errors }}</div>
+        <div>{{ form.izp_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">Перевод пенсии: </label>{{ form.pension_result }} {{ form.pension_comment }}</p>
+        <div>{{ form.pension_result.errors }}</div>
+        <div>{{ form.pension_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">Навигация на БО: </label>{{ form.broker_navigate_result }} {{ form.broker_navigate_comment }}</p>
+        <div>{{ form.broker_navigate_result.errors }}</div>
+        <div>{{ form.broker_navigate_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">НСЖ: </label>{{ form.nsg_result }} {{ form.nsg_sum }} {{ form.nsg_comment }}</p>
+        <div>{{ form.nsg_result.errors }}</div>
+        <div>{{ form.nsg_sum.errors }}</div>
+        <div>{{ form.nsg_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">ИСЖ: </label>{{ form.isg_result }} {{ form.isg_sum }} {{ form.isg_comment }}</p>
+        <div>{{ form.isg_result.errors }}</div>
+        <div>{{ form.isg_sum.errors }}</div>
+        <div>{{ form.isg_comment.errors }}</div>
+      </div>
+      <div class="visit-detail__wrapper-products">
+        <p class="visit-detail__product flex"><label class="visit-detail__label-products" for="">НПО: </label>{{ form.npo_result }} {{ form.npo_sum }} {{ form.npo_comment }}</p>
+        <div>{{ form.npo_result.errors }}</div>
+        <div>{{ form.npo_sum.errors }}</div>
+        <div>{{ form.npo_comment.errors }}</div>
+      </div>
+
+    </div>
+    <button class="btn visit-detail__btn-control" type="submit">Сохранить</button>
+  </form>
+</div>
+{% endblock %}

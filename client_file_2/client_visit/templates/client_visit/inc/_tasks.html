@@ -1,0 +1,30 @@
+<h1 class="title index__title">Задачи на сегодня</h1>
+  <table border="1" cellspacing="0" cellpadding="3" class="table table-striped">
+    <thead>
+      <tr>
+        {% if request.user.groups.all.0.name == 'Директор' or request.user.groups.all.0.name == 'Управляющий' %}
+        <th>Сотрудник</th>
+        {% endif %}
+        <th>Клиент</th>
+        <th>Дата следующего контакта</th>
+        <th>Визит / Звонок</th>
+        <th>Комментарий</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if tasks %}
+      {% for task_v in tasks %}
+      <tr>
+        {% if request.user.groups.all.0.name == 'Директор' or request.user.groups.all.0.name == 'Управляющий' %}
+        <td>{{ task_v.employee }}</td>
+        {% endif %}
+        <td><a class="table__link" href="{% url 'visit_detail' task_v.pk %}">{{ task_v.last_name_client }} {{ task_v.first_name_client }} {{ task_v.middle_name_client }}</a></td>
+        <td>{{ task_v.date_next_contact }}</td>
+        <td>{{ task_v.type_next_contact }}</td>
+        <td>{{ task_v.total_comment }}</td>
+      </tr>
+      {% endfor %}
+      
+      {% endif %}
+    </tbody>
+  </table>

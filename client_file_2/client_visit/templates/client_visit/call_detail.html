@@ -1,0 +1,53 @@
+{% extends 'client_visit/base.html' %}
+{% load static %}
+{% load l10n %}
+{% load visit_client_tags %}
+
+{% block title %}
+  - {{title}}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="title visit-detail__title">Звонок клиенту от {{ calls.date_call }}</h1>
+  <input class="btn btn__next_upper" type=button value="Назад" onClick="javascript:history.go(-1);">
+  
+  <div class="call__name-client flex">
+    <div class="call__wrapper">
+      <p><label class="call__label" for="">Фамилия: </label>{{ calls.last_name_client }}</p>
+    </div>
+    <div class="call__wrapper">
+      <p><label class="call__label" for="">Имя: </label>{{ calls.first_name_client }}</p>
+    </div>
+    <div class="call__wrapper">
+      <p><label class="call__label" for="">Отчество: </label>{{ calls.middle_name_client }}</p>
+    </div>
+    <div class="call__wrapper">
+      <p><label class="call__label" for="">Дата рождения клиента: </label>{{ calls.date_of_birth }}</p>
+    </div>
+  </div>
+  
+  <div class="call__product flex">
+    <div class="call__wrapper">
+      <p><label class="call__label" for="">Продукт: </label>{{ calls.main_product }}</p>
+    </div>
+    <div class="call__wrapper">
+      <p><label class="call__label" for="">Дата следующего контакта: </label>{{ calls.date_next_contact }}</p>
+    </div>
+    <div class="call__wrapper">
+      <p><label class="call__label" for="">Тип следующего контакта: </label>{{ calls.type_next_contact }}</p>
+    </div>
+  </div>
+  <div class="call__result flex">
+    <div class="call__wrapper">
+      <p><label class="call__label" for="">Результат звонка: </label>{{ calls.result }}</p>
+    </div>
+    <div class="call__wrapper">
+      <p><label class="call__label" for="">Сумма: </label>{{ calls.sum }}</p>
+    </div>
+  </div>
+  <div class="call__wrapper">
+    <p><label class="call__label" for="">Комментарий:</label>{{ calls.comment }}</p>
+  </div>
+
+{% endblock %}

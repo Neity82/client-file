@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'client_visit/css/normalize.css' %}">
+  <link rel="stylesheet" href="{% static 'client_visit/css/style.css' %}">
+  <title>
+    Клиентский файл
+    {% block title %}
+      Title
+    {% endblock %}
+  </title>
+</head>
+<body>
+  <header class="header">
+    <div class="header__upper">
+      <div class="container header__upper_container flex">
+        <a href="" class="header__upper_logo">
+          <img src="{% static 'client_visit/images/logo.png' %}" alt="" class="header__upper_img">
+        </a>
+        <div class="header__upper_wrapper flex">
+          {% if request.user.is_authenticated %}
+          <p><a class="header__profile" href="{% url 'profile' user.pk %}">{{ user }}</a></p>
+          <a href="{% url 'logout' %}" class="header__upper_link">Выход</a>
+          {% else %}
+          <a href="{% url 'login' %}" class="header__upper_link">Войти</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="header__lower">
+      <div class="container header__lower_container">
+        {% if request.user.is_authenticated %}
+        <nav class="header__lower_nav nav-lower">
+          <ul class="nav-lower__list list-reset flex">
+            <li class="nav-lower__item"><a href="{% url 'index' %}">Главная</a></li>
+            <div class="nav-lower__item_wrapper flex">
+              <li class="nav-lower__item"><a href="{% url 'visit' %}">Визит</a></li>
+              <li class="nav-lower__item"><a href="{% url 'call' %}">Звонок</a></li>
+            </div>
+            <li class="nav-lower__item"><a href="{% url 'reports' %}">Отчеты</a></li>
+          </ul>
+        </nav>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,175 @@
+{% extends 'client_visit/base.html' %}
+{% load static %}
+{% load l10n %}
+{% load visit_client_tags %}
+
+{% block title %}
+  - {{title}}
+{% endblock %}
+
+{% block content %}
+<div class="container visit-detail__container">
+  <h1 class="title visit-detail__title">Визит клиента от {{ visits.date_visit }}</h1>
+  <input class="btn btn__next_upper" type=button value="Назад" onClick="javascript:history.go(-1);">
+
+  <div class="visit-detail__client flex">
+    <div class="visit-detail__wrapper flex">
+      <p class="visit-detail__label">Клиент: </p>
+      <p class="visit-detail__name">{{object.last_name_client}} {{object.first_name_client}} {{object.middle_name_client}}</p>
+    </div>
+    <div class="visit-detail__wrapper flex">
+      <p class="visit-detail__label">Дата рождения: </p>
+      <p class="visit-detail__name">{{object.date_of_birth}}</p>
+    </div>
+  </div>
+  
+  <div class="flex" style="justify-content: space-between;">
+    <div class="visit-detail__form-left">
+      <div class="visit-detail__salary flex">
+        <div class="visit-detail__wrapper">
+          <p><label class="visit-detail__label" for="">ИНН работодателя: </label>{{ visits.inn_employer }}</p>
+        </div>
+        <div class="visit-detail__wrapper flex">
+          <p><label class="visit-detail__label" for="">ЗП договор: </label>{% get_salary_project visits.inn_employer %}</p>
+        </div>        
+      </div>
+      <div class="visit-detail__pension flex">
+        <div class="visit-detail__wrapper">
+          <p><label class="visit-detail__label" for="">Банк пенсия: </label>{{ visits.pension_bank }}</p>
+        </div>
+        <div class="visit-detail__wrapper flex">
+          <p><label class="visit-detail__label" for="">Пенсионер: </label>{% is_pension object.middle_name_client visits.date_of_birth %}</p>
+        </div>        
+      </div>
+      <div class="visit-detail__main-product flex">
+        <div class="visit-detail__wrapper">
+          <p><label class="visit-detail__label" for="">Основной продукт: </label>{{ visits.main_product }}</p>
+        </div>       
+      </div>
+    </div>
+    <div class="visit-detail__form-right">
+      <div class="flex">
+        <div class="visit-detail__wrapper">
+          <p><label class="visit-detail__label" for="">Дата следующего контакта: </label>{{ visits.date_next_contact }}</p>
+        </div>
+        <div class="visit-detail__wrapper">
+          <p><label class="visit-detail__label" for="">Тип следующего контакта: </label>{{ visits.type_next_contact }}</p>
+        </div>
+      </div>
+      <div class="visit-detail__wrapper">
+        <p><label class="visit-detail__label" for="">Общий комментарий по визиту: </label>{{ visits.total_comment }}</p>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-striped" border="'1" cellspacing="0" cellpadding="3">
+    <thead>
+      <tr>
+        <th>Продукт</th>
+        <th>Результат</th>
+        <th>Сумма</th>
+        <th>Комментарий</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if visits.credit_result %}
+      <tr>
+        <td>Кредит наличными</td>
+        <td>{{ visits.credit_result }}</td>
+        <td>{{ visits.credit_sum }}</td>
+        <td>{{ visits.credit_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.credit_insurance_result %}
+      <tr>
+        <td>Страховка к КН</td>
+        <td>{{ visits.credit_insurance_result }}</td>
+        <td>{{ visits.credit_insurance_sum }}</td>
+        <td>{{ visits.credit_insurance_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.ksp_result %}
+      <tr>
+        <td>КСП</td>
+        <td>{{ visits.ksp_result }}</td>
+        <td>{{ visits.ksp_sum }}</td>
+        <td>{{ visits.ksp_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.credit_card_result %}
+      <tr>
+        <td>Кредитная карта</td>
+        <td>{{ visits.credit_card_result }}</td>
+        <td>---</td>
+        <td>{{ visits.credit_card_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.credit_card_insurance_result %}
+      <tr>
+        <td>Страховка к КК</td>
+        <td>{{ visits.credit_card_insurance_result }}</td>
+        <td>---</td>
+        <td>{{ visits.credit_card_insurance_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.deposit_result %}
+      <tr>
+        <td>Депозит</td>
+        <td>{{ visits.deposit_result }}</td>
+        <td>{{ visits.deposit_sum }}</td>
+        <td>{{ visits.deposit_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.service_package_result %}
+      <tr>
+        <td>Пакет услуг</td>
+        <td>{{ visits.service_package_result }}</td>
+        <td>---</td>
+        <td>{{ visits.service_package_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.izp_result %}
+      <tr>
+        <td>ИЗП</td>
+        <td>{{ visits.izp_result }}</td>
+        <td>---</td>
+        <td>{{ visits.izp_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.pension_result %}
+      <tr>
+        <td>Перевод пенсии</td>
+        <td>{{ visits.pension_result }}</td>
+        <td>---</td>
+        <td>{{ visits.pension_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.nsg_result %}
+      <tr>
+        <td>НСЖ</td>
+        <td>{{ visits.nsg_result }}</td>
+        <td>{{ visits.nsg_sum }}</td>
+        <td>{{ visits.nsg_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.isg_result %}
+      <tr>
+        <td>ИСЖ</td>
+        <td>{{ visits.isg_result }}</td>
+        <td>{{ visits.isg_sum }}</td>
+        <td>{{ visits.isg_comment }}</td>
+      </tr>
+      {% endif %}
+      {% if visits.npo_result %}
+      <tr>
+        <td>НПО</td>
+        <td>{{ visits.npo_result }}</td>
+        <td>{{ visits.npo_sum }}</td>
+        <td>{{ visits.npo_comment }}</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endblock %}

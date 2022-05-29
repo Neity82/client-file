@@ -1,0 +1,54 @@
+{% extends 'client_visit/base.html' %}
+{% load static %}
+
+{% block title %}
+  {{title}}
+{% endblock %}
+
+{% block content %}
+<div class="container index__container">
+{% if user.is_authenticated %}
+  <div class="index__nav">
+    <nav>
+      <ul class="list-reset flex">
+        <li class="index__nav-item"><a href="{% url 'index' %}" class="index__nav-link">Потенциал</a></li>
+        <li class="index__nav-item"><a href="{% url 'tasks_today' %}" class="index__nav-link">Задачи на сегодня</a></li>
+        <li class="index__nav-item"><a href="{% url 'visits_today' %}" class="index__nav-link">Визиты сегодня</a></li>
+        <li class="index__nav-item"><a href="{% url 'calls_today' %}" class="index__nav-link">Звонки сегодня</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  {% if page == 'potential' %}
+    {% include 'client_visit/inc/_potential.html' %}
+  {% endif %}
+
+  {% if page == 'tasks' %}
+    {% include 'client_visit/inc/_tasks.html' %}
+  {% endif %}
+  
+  {% if page == 'visits' %}
+    {% include 'client_visit/inc/_visits.html' %}
+  {% endif %}
+
+  {% if page == 'calls' %}
+    {% include 'client_visit/inc/_calls.html' %}
+  {% endif %}
+
+  <nav class="paginator__nav">
+    <ul class="list-reset flex paginator__list">
+      {% for page in page_obj.paginator.page_range %}
+      {% if page_obj.number == page %}
+      <li class="paginatir__item paginatir__item-selected">{{ page }}</li>
+      {% else %}
+      <li class="paginatir__item">
+        <a href="?page={{ page }}">{{ page }}</a>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+{% endif %}
+
+</div>
+{% endblock %}

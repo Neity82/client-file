@@ -1,0 +1,68 @@
+{% load visit_client_tags %}
+{% load reports_tags %}
+
+<h1 class="title index__title">Потенциал</h1>
+<table border="1" cellspacing="0" cellpadding="3" class="table table-striped">
+  <thead>
+    <tr class="table__thead_1">
+      <th rowspan="2">Сотрудник</th>
+      {% get_date_list as date_list %}
+      {% for date in date_list %}
+      <th colspan="2">{{ date|date:"D d.m.Y" }}</th>
+      {% endfor %}
+    </tr>
+    <tr class="table__thead_2">
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+      <th>Кол-во КН</th>
+      <th>Сумма</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% get_offices request.user as offices %} 
+      {% for office in offices %}
+      <tr>
+        <td colspan="21" class="table__office">{{ office }}</td>
+      </tr>
+      {% get_employees office as employees %}
+      {% for employee in employees %}
+      <tr>
+        <td>{{ employee.last_name }} {{ employee.first_name }} {{ employee.middle_name }}</td>
+        {% for date in date_list %}
+        <td>
+          {% for data in potential %}
+            {% if data.date_next_contact == date and data.employee_id == employee.id %}
+            {{ data.count }}
+            {% endif %}
+          {% endfor %}
+        </td>
+        <td>
+          {% for data in potential %}
+            {% if data.date_next_contact == date and data.employee_id == employee.id %}
+            {{ data.sum }}
+            {% endif %}
+          {% endfor %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+      {% endfor %}
+
+  </tbody>
+</table>

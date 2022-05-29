@@ -1,0 +1,78 @@
+{% extends 'client_visit/base.html' %}
+{% load static %}
+{% load reports_tags %}
+
+{% block title %}
+  - {{title}}
+{% endblock %}
+
+{% block content %}
+<div class="container visit-detail-reports__container">
+  <h1 class="title">Детализация звонков</h1>
+  <button class="btn btn__next_upper"><a href="{% url 'reports' %}">Назад</a></button>
+  <div class="flex visit-detail-report__content">
+    <div class="visit-detail-report__left">
+      <div class="table__wrapper">
+        <table  border="1" cellspacing="0" cellpadding="3" class="table table-striped call-detail-reports__table">
+          <thead>
+            <tr>
+              <th></th>
+              {% if request.user.groups.all.0.name == 'Директор' or request.user.groups.all.0.name == 'Управляющий' %}
+              <th>Сотрудник</th>
+              {% endif %}
+              <th>Дата визита</th>
+              <th>ФИО клиента</th>
+              <th>Дата рождения</th>
+              <th>Основной продукт</th>
+              <th>Дата следующего контакта</th>
+              <th>Тип следующего контакта</th>
+              <th>Результат звонка</th>
+              <th>Комментарий</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for call in calls %}
+            <tr>
+              <td><a href="{% url 'call_detail' call.pk %}"><img class="table__img" src="{% static 'client_visit/images/arrow.png' %}" alt=""></a></td>
+              {% if request.user.groups.all.0.name == 'Директор' or request.user.groups.all.0.name == 'Управляющий' %}
+              <td>{{ call.employee }}</td>
+              {% endif %}
+              <td>{{ call.date_call }}</td>
+              <td>{{ call.last_name_client }} {{ call.first_name_client }} {{ call.middle_name_client }}</td>
+              <td>{{ call.date_of_birth }}</td>
+              <td>{{ call.main_product }}</td>
+              <td>{{ call.date_next_contact }}</td>
+              <td>{{ call.type_next_contact }}</td>
+              <td>{{ call.result }}</td>
+              <td>{{ call.comment|truncatechars:25 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <nav class="paginator__nav">
+        <ul class="list-reset flex paginator__list">
+          {% for page in page_obj.paginator.page_range %}
+          {% if page_obj.number == page %}
+          <li class="paginatir__item paginatir__item-selected">{{ page }}</li>
+          {% else %}
+          <li class="paginatir__item">
+            <a href="?page={{ page }}">{{ page }}</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+    <div class="visit-detail-report__right">
+      <form action="{% url 'filter_calls' %}" method="get">
+        {% csrf_token %}
+        {{ filter.as_p }}
+        <button class="btn visit-detail-report__right-btn" type="submit">Найти</button>
+      </form>
+      <button class="btn visit-detail-report__right-btn"><a href="{% url 'call_detail_reports' %}">Показать все</a></button>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

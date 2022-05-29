@@ -1,0 +1,81 @@
+{% extends 'client_visit/base.html' %}
+{% load static %}
+
+{% block title %}
+  - {{title}}
+{% endblock %}
+
+{% block content %}
+<div class="container call__container">
+  <h1 class="title call__title">Звонок клиенту</h1>
+  <button class="btn btn__next_upper"><a href="{% url 'index' %}">Выйти</a></button>
+  
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="call__form">
+      <div class="call__name-client flex">
+        <div class="call__wrapper">
+          <p><label class="call__label" for="">Фамилия: </label>{{ form.last_name_client }}</p>
+          <div>{{ form.Last_name_client.errors }}</div>
+        </div>
+        <div class="call__wrapper">
+          <p><label class="call__label" for="">Имя: </label>{{ form.first_name_client }}</p>
+          <div>{{ form.first_name_client.errors }}</div>
+        </div>
+        <div class="call__wrapper">
+          <p><label class="call__label" for="">Отчество: </label>{{ form.middle_name_client }}</p>
+          <div>{{ form.middle_name_client.errors }}</div>
+        </div>
+        <div class="call__wrapper">
+          <p><label class="call__label" for="">Дата рождения клиента: </label>{{ form.date_of_birth }}</p>
+          <p class="help">(Дата рождения заполняется в формате ДД.ММ.ГГГГ)</p>
+          <div>{{ form.date_of_birth.errors }}</div>
+        </div>
+      </div>
+      
+      <div class="call__product flex">
+        <div class="call__wrapper">
+          <p><label class="call__label" for="">Продукт: </label>{{ form.main_product }}</p>
+          <div>{{ form.main_product.errors }}</div>
+        </div>
+        <div class="call__wrapper">
+          <p><label class="call__label" for="">Дата следующего контакта: </label>{{ form.date_next_contact }}</p>
+          <p class="help">(Дата следующего контакта заполняется в формате ДД.ММ.ГГГГ)</p>
+          <div>{{ form.date_next_contact.errors }}</div>
+        </div>
+        <div class="call__wrapper">
+          <p><label class="call__label" for="">Тип следующего контакта: </label>{{ form.type_next_contact }}</p>
+          <p class="help">(Обязательно к заполнению, если заполнена дата следующего контакта)</p>
+          <div>{{ form.type_next_contact.errors }}</div>
+        </div>
+      </div>
+      <div class="call__result flex">
+        <div class="call__wrapper">
+          <p><label class="call__label" for="">Результат звонка: </label>{{ form.result }}</p>
+          <div>{{ form.result.errors }}</div>
+        </div>
+        <div class="call__wrapper">
+          <p><label class="call__label" for="">Сумма: </label>{{ form.sum }}</p>
+          <div>{{ form.sum.errors }}</div>
+        </div>
+        <div class="call__wrapper">
+          <p><label class="call__label" for=""></label>{{ form.comment }}</p>
+          <div>{{ form.comment.errors }}</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn call__btn" type="submit">Сохранить</button>
+    {% if messages %}
+    <ul class="call__messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">
+                {{ message|safe }}
+                <a href="{% url 'call_form' message.extra_tags %}" class="close">✖</a>
+            </li>
+        {% endfor %}
+    </ul>
+  {% endif %}
+  </form>
+</div>
+
+{% endblock %}

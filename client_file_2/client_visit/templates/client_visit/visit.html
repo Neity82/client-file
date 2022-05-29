@@ -1,0 +1,37 @@
+{% extends 'client_visit/base.html' %}
+{% load static %}
+
+{% block title %}
+  - {{title}}
+{% endblock %}
+
+{% block content %}
+<div class="container visit__container">
+  <h1 class="title visit__title">Визит клиента</h1>
+  <p class="help">Заполните данные, затем нажмите кнопку 'Проверить'</p>
+  <p class="help">Дата рождения заполняется в формате ДД.ММ.ГГГГ</p>
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="visit__form flex">
+      <div class="visit__wrapper">
+        <p><label class="visit-detail__label" for="">ФИО клиента: </label>{{ form.name_client }}</p>
+        <div>{{ form.name_client.errors }}</div>
+      </div>
+      <div class="visit__wrapper">
+        <p><label class="visit-detail__label" for="">Дата рождения клиента: </label>{{ form.date_of_birth }}</p>
+        <div>{{ form.date_of_birth.errors }}</div>
+      </div>
+      <div class="visit__wrapper">
+        <p><label class="visit-detail__label" for="">ИНН работодателя: </label>{{ form.inn_employer }}</p>
+        <div>{{ form.inn_employer.errors }}</div>
+      </div>
+      <div class="visit__wrapper">
+        <p><label class="visit-detail__label" for="">Продукт: </label>{{ form.main_product }}</p>
+        <div>{{ form.main_product.errors }}</div>
+      </div>
+    </div>
+    <button class="btn visit__btn-control" type="submit">Проверить</button>
+  </form>
+</div>
+
+{% endblock %}

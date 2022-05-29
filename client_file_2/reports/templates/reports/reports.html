@@ -1,0 +1,25 @@
+{% extends 'client_visit/base.html' %}
+{% load static %}
+{% load reports_tags %}
+
+{% block title %}
+  - {{title}}
+{% endblock %}
+
+{% block content %}
+<div class="container reports__container">
+  <h1 class="title reports__title">Отчеты</h1>
+  <button class="btn btn__next_upper"><a href="{% url 'index' %}">Назад</a></button>
+  <ul class="list-reset reports__list">
+    <div class="reports__wrapper">
+      <li class="reports__item"><a href="{% url 'today_sales_reports' %}">Отчет за текущий день >>></a></li>
+      <li class="reports__item"><a href="{% url 'month_sales_reports' %}">Отчет за месяц >>></a></li>
+      <li class="reports__item"><a href="{% url 'quarter_sales_reports' %}">Отчет за квартал >>></a></li>
+    </div>
+    <div class="reports__wrapper">
+      <li class="reports__item"><a href="{% url 'visit_detail_reports' %}">Детализация визитов >>></a></li>
+      <li class="reports__item"><a href="{% url 'call_detail_reports' %}">Детализация звонков >>></a></li>
+    </div>
+  </ul>
+</div>
+{% endblock %}
